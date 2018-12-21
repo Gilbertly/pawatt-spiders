@@ -1,0 +1,50 @@
+version: 2
+defaults: &defaults
+  working_directory: ~/pawatt
+  docker:
+    - image: circleci/python:3.6.1
+
+jobs:
+  build:
+    <<: *defaults
+    steps:
+      - checkout
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "requirements.txt" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+      - run:
+          name: install dependencies
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
+            pip install -r requirements.txt
+      - save_cache:
+          paths:
+            - ./venv
+          key: v1-dependencies-{{ checksum "requirements.txt" }}
+
+  deploy:
+    <<: *defaults
+    steps:
+      - run:
+          name: Configure Scrapinghub Credentials
+          command: |
+            cat ~/pawatt/scripts/scrapinghub-setup.yml |
+            sed "s~api_key~$(prinitf "${SHUB_KEY}")~" > "~/.scrapinghub.yml"
+      - run:
+          name: Deploy to Scrapinghub
+          command: shub deploy
+
+workflows:
+  version: 2
+  deploy:
+    jobs:
+      - deploy:
+          context: scrapinghub-pawatt
+          filters:
+            branches:
+              only:
+                - master

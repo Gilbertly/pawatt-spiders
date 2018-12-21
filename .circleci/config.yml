@@ -28,12 +28,12 @@ jobs:
       - run:
           name: Test step
           command: |
-            touch ~/.scrapinghub.yml && cd ~ && pwd
+            touch /home/circleci/pawatt/.scrapinghub.yml && cat /home/circleci/pawatt/.scrapinghub.yml
       - run:
           name: Configure Scrapinghub Credentials
           command: |
             cat pawatt/scripts/scrapinghub-setup.yml |
-            sed "s~api_key~$(printf "${SHUB_KEY}")~" > "~/.scrapinghub.yml"
+            sed "s~api_key~$(printf "${SHUB_KEY}")~" > "/home/circleci/pawatt/.scrapinghub.yml"
       - run:
           name: Deploy to Scrapinghub
           command: shub deploy

@@ -45,6 +45,8 @@ workflows:
     jobs:
       - deploy:
           context: scrapinghub-pawatt
+          requires: 
+            - build
           filters:
             branches:
               only:

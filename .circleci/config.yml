@@ -33,7 +33,7 @@ jobs:
           name: Configure Scrapinghub Credentials
           command: |
             cat ~/pawatt/scripts/scrapinghub-setup.yml |
-            sed "s~api_key~$(prinitf "${SHUB_KEY}")~" > "~/.scrapinghub.yml"
+            sed "s~api_key~$(printf "${SHUB_KEY}")~" > "~/.scrapinghub.yml"
       - run:
           name: Deploy to Scrapinghub
           command: shub deploy

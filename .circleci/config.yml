@@ -28,7 +28,8 @@ jobs:
       - run:
           name: Test step
           command: |
-            cat ~/pawatt/scripts/scrapinghub-setup.yml
+            # cat ~/pawatt/scripts/scrapinghub-setup.yml
+            cat pawatt/scripts/scrapinghub-setup.yml
       - run:
           name: Configure Scrapinghub Credentials
           command: |

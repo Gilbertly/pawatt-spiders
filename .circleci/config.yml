@@ -25,10 +25,6 @@ jobs:
           paths:
             - ./venv
           key: v1-dependencies-{{ checksum "requirements.txt" }}
-
-  deploy:
-    <<: *defaults
-    steps:
       - run:
           name: Test step
           command: |
@@ -47,16 +43,8 @@ workflows:
   version: 2
   build-deploy:
     jobs:
-      - build:
-          context: scrapinghub-pawatt
-          filters:
-            branches:
-              only:
-                - master
       - deploy:
           context: scrapinghub-pawatt
-          requires: 
-            - build
           filters:
             branches:
               only:

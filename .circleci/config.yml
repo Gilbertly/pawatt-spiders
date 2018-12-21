@@ -28,7 +28,7 @@ jobs:
       - run:
           name: Test step
           command: |
-            touch ~/.scrapinghub.yml && ls -a ~ && cat ~/.scrapinghub.yml
+            touch ~/.scrapinghub.yml && cat ~/.scrapinghub.yml
       - run:
           name: Configure Scrapinghub Credentials
           command: |

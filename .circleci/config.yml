@@ -35,8 +35,7 @@ jobs:
       - run:
           name: Deploy to Scrapinghub
           command: |
-            # /usr/local/bin/shub deploy
-            which shub
+            /home/circleci/pawatt/venv/bin/shub deploy
 
 workflows:
   version: 2

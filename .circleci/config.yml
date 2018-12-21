@@ -34,7 +34,7 @@ jobs:
             sed "s~api_key~$(printf "${SHUB_KEY}")~" > "/home/circleci/pawatt/.scrapinghub.yml"
       - run:
           name: Deploy to Scrapinghub
-          command: shub deploy
+          command: /usr/local/bin/shub deploy
 
 workflows:
   version: 2

@@ -20,15 +20,13 @@ jobs:
           command: |
             python3 -m venv venv
             . venv/bin/activate
+            pip install --upgrade pip
             pip install -r requirements.txt
+            pip install shub
       - save_cache:
           paths:
             - ./venv
           key: v1-dependencies-{{ checksum "requirements.txt" }}
-      - run:
-          name: Test step
-          command: |
-            touch /home/circleci/pawatt/.scrapinghub.yml && cat /home/circleci/pawatt/.scrapinghub.yml
       - run:
           name: Configure Scrapinghub Credentials
           command: |

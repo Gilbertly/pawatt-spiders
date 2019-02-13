@@ -18,7 +18,7 @@ REDIRECT_ENABLED = False
 
 # Configure item pipelines
 ITEM_PIPELINES = {
-	'pawatt.pipelines.S3Pipeline': 300
+  'pawatt.pipelines.S3Pipeline': 300
 }
 
 AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID")

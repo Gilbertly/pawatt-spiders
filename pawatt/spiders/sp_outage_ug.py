@@ -26,8 +26,19 @@ class OutageSpiderUG(Spider):
   def save_pdf(self, response):
     pdf_name = response.url.split("/")[-1]
     pdf_path = join(dirname(__file__), "../data/{}".format(pdf_name))
-    logging.info("Saving pdf file '{}' ...".format(pdf_name))
-    with open(pdf_path, "wb") as file:
-      file.write(response.body)
-      logging.info("Saved pdf file '{}'.".format(pdf_name))
-      yield OutageItemUG({"data": pdf_name})
+    file_url = response.url
+
+    data = {
+      "pdf_name": pdf_name,
+      "file_url": file_url
+    }
+    
+    try:
+      with open(pdf_path, "wb") as file:
+        logging.info("Saving pdf file '{}' ...".format(pdf_name))
+        file.write(response.body)
+        logging.info("Saved pdf file '{}'.".format(pdf_name))
+      yield OutageItemUG({"data": data, "io_error": False})
+    except IOError as error:
+      logging.info("IOError: '{}'".format(error))
+      yield OutageItemUG({"data": data, "io_error": True})

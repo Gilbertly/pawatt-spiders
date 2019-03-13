@@ -2,6 +2,7 @@ import logging
 import scrapy 
 from scrapy import Spider
 from pawatt.items import OutageItemUG
+from os.path import join, dirname
 
 
 class OutageSpiderUG(Spider):
@@ -23,8 +24,8 @@ class OutageSpiderUG(Spider):
     yield scrapy.Request(outage_url, self.save_pdf)
   
   def save_pdf(self, response):
-    pdf_name = response.url.split("/")[5]
-    pdf_path = "pawatt/data/{}".format(pdf_name)
+    pdf_name = response.url.split("/")[-1]
+    pdf_path = join(dirname(__file__), "../data/{}".format(pdf_name))
     logging.info("Saving pdf file '{}' ...".format(pdf_name))
     with open(pdf_path, "wb") as file:
       file.write(response.body)

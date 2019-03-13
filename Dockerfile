@@ -15,6 +15,7 @@ RUN apt-get update \
   make \
   python-pip \
   ssh \
+  wget \
   && apt-get autoremove \
   && apt-get clean
 

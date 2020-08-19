@@ -1,3 +1,4 @@
 project: 365348
+stack: scrapy:1.7-py3
 requirements:
   file: Pipfile

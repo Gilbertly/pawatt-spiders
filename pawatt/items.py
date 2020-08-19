@@ -1,4 +1,4 @@
-import scrapy 
+import scrapy
 from scrapy import Item, Field
 
 
@@ -11,5 +11,6 @@ class OutageItemUG(Item):
 
 class OutageItemKE(Item):
   data = Field()
+  io_error = Field()
   def __str__(self):
     return ""

@@ -1,2 +1,3 @@
 project: 365348
-requirements_file: requirements.txt
+requirements:
+  file: Pipfile

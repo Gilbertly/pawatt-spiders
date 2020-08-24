@@ -21,13 +21,14 @@ class S3Pipeline(object):
   def process_item(self, item, spider):
     file_name = item["data"]["pdf_name"]
     upload_folder_year = file_name.split(".")[-2]
+    upload_filepath = f"raw/{upload_folder_year}/{file_name}"
 
     if item["io_error"]:
       file_url = item["data"]["file_url"]
-      self.stream_to_s3(file_name, file_url)
+      self.stream_to_s3(upload_filepath, file_url)
       self.new_items += 1
     else:
-      file_path = "{}{}".format(self.pdf_path, file_name)
+      file_path = f"{self.pdf_path}{file_name}"
       client = boto3.client(
         "s3",
         aws_access_key_id=self.access_key,
@@ -38,25 +39,20 @@ class S3Pipeline(object):
       transfer.upload_file(
         file_path,
         self.s3_bucket,
-        f"raw/{upload_folder_year}/"+file_name
+        upload_filepath
       )
       self.new_items += 1
-      logging.info("Uploaded pdf '{}' to S3.".format(file_path))
+      logging.info(f"Uploaded pdf '{file_name}' to S3.")
 
     return item
 
-  def stream_to_s3(self, file_name, file_url):
-    logging.info("Streaming '{}' into S3 ...".format(file_name))
-    resp = call(
-      "wget -qO- '{}' | AWS_ACCESS_KEY_ID={} AWS_SECRET_ACCESS_KEY={} aws s3 cp - s3://{}/outages-ug/{}".format(
-        file_url, self.access_key, self.secret_key, self.s3_bucket, file_name
-      ), shell=True)
+  def stream_to_s3(self, upload_filepath, file_url):
+    logging.info(f"Streaming '{upload_filepath}' into S3 ...")
+    resp = call(f"wget -qO- '{file_url}' | AWS_ACCESS_KEY_ID={self.access_key} AWS_SECRET_ACCESS_KEY={self.secret_key} aws s3 cp - s3://{self.s3_bucket}/{upload_filepath}", shell=True)
     if not resp:
-      logging.info("Successfully streamed '{}' into S3!".format(file_name))
+      logging.info(f"Successfully streamed '{upload_filepath}' into S3!")
     else:
-      logging.info("Error streaming '{}' into S3!".format(file_name))
+      logging.info(f"Error streaming into S3 file path!")
 
   def close_spider(self, spider):
-    logging.info("Items New: '{}'".format(
-      self.new_items
-    ))
+    logging.info(f"Items New: '{self.new_items}'")

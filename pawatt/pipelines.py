@@ -20,7 +20,7 @@ class S3Pipeline(object):
 
   def process_item(self, item, spider):
     file_name = item["data"]["pdf_name"]
-    upload_folder_postfix = spider.name.split("_")[-1]
+    upload_folder_year = file_name.split(".")[-2]
 
     if item["io_error"]:
       file_url = item["data"]["file_url"]
@@ -38,7 +38,7 @@ class S3Pipeline(object):
       transfer.upload_file(
         file_path,
         self.s3_bucket,
-        f"outages-{upload_folder_postfix}/"+file_name
+        f"raw/{upload_folder_year}/"+file_name
       )
       self.new_items += 1
       logging.info("Uploaded pdf '{}' to S3.".format(file_path))
